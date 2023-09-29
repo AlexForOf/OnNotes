@@ -1,0 +1,8 @@
+.mainpage-main {
+    width: 100%;
+    display: grid;
+    margin: 0 auto;
+    /* grid-template-columns: repeat(6, 1fr); */
+    gap: 20px;
+    padding: 0 10px;
+}

@@ -1,0 +1,16 @@
+.drawer-right {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.drawer-right .icon {
+    align-self: flex-end;
+}
+
+.logo-font-brighter {
+    color: #3282B8;
+}
+
+.logo-font-darker {
+    color: #0F4C75;
+}
