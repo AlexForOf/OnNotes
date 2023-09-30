@@ -5,5 +5,45 @@
     margin: 0 auto;
     /* grid-template-columns: repeat(6, 1fr); */
     gap: 20px;
-    padding: 0 10px;
+    padding: 0 25px;
+}
+
+/* Modal window */
+
+.mainpage-main-modal-overlay {
+    background: lightgray;
+    opacity: 0.6;
+    top: 0;
+    left: 0;
+    position: absolute;
+    z-index: 3;
+    height: 100%;
+    width: 100vw;
+    /* height: 100%; */
+    /* width: 100%; */
+}
+
+.mainpage-main-modal {
+    color: #FFFFFF;
+    position: absolute;
+    
+    padding: 10px;
+    background: green;
+    z-index: 4;
+
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.mainpage-main-modal form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.main-modal-part {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
 }

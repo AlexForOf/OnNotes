@@ -2,46 +2,38 @@ import React from "react";
 
 import "./Main.css"
 
+import { move, reorder } from "./functions/dragndrop";
+import { defineGridSize } from "./functions/defineGridSize"
+
+import { mainButtonStyles, actionButtonStyles } from "./styles/styles";
+
 // Custom components
 
 import { DragDropContext } from "react-beautiful-dnd"
 import { DroppableContainer } from "./DroppableContainer";
- 
-const InitialList = [
-    {
-        id: 'id1',
-        title: "Robin",
-        content: "Wieruchasdadadadadadaadadadadad"
-    },
-    {
-        id: 'id2',
-        title: "Aiden",
-        content: "Wieruch"
-    },
-    {
-        id: 'id3',
-        title: "Jannet",
-        content: "Wieruch"
-    },
-]
 
+
+import { Fab, Action } from 'react-tiny-fab';
+import 'react-tiny-fab/dist/styles.css';
+
+import { HiPlus, HiDocumentAdd } from "react-icons/hi";
+import { MainModal } from "../../components/MainModal";
+ 
 
 export const Main = ({screenSize}) => {
-
-    const defineGridSize = (screenWidth) => {
-        let toReturn = [];
-        for (let index = 0; index < (screenWidth <= 768 ? 2 : 6); index++) {
-            const element = (index === 0 ? InitialList : []);
-            toReturn.push(element)
-        }
-        return toReturn
-    }
-    
     const [list, setList] = React.useState(defineGridSize(screenSize.width))
+    const [noteInfo, setNoteInfo] = React.useState({
+        title: "",
+        content: ""
+    })
+    const [isVisibleModal, setIsVisibleModal] = React.useState(false)
 
     const containerStyles = {
         gridTemplateColumns: `repeat(${list.length}, 1fr)`
     }
+
+
+    // Notes API
 
     const handleDragEnd = ({ destination, source }) => {
         if(!destination) return;
@@ -66,26 +58,28 @@ export const Main = ({screenSize}) => {
 
     }
 
-    const reorder = (list, startIndex, endIndex) => {
-        const result = Array.from(list);
-        const [removed] = result.splice(startIndex, 1);
-        result.splice(endIndex, 0, removed);
-
-        return result;
+    const handleInputChange = ({value, name}) => {
+        setNoteInfo(prevNoteInfo => ({...prevNoteInfo, [name]: value}))
+        console.log(noteInfo)
     }
 
-    const move = (source, destination, droppableSource, droppableDestination) => {
-        const sourceClone = Array.from(source)
-        const destinationClone = Array.from(destination)
-        const [removed] = sourceClone.splice(droppableSource.index, 1)
+    const addNote = (event) => {
+        event.preventDefault();
 
-        destinationClone.splice(droppableDestination.index, 0, removed)
+        console.log(noteInfo)
+        const note = {
+            id: `${(new Date()).getTime()}`,
+            title: noteInfo.title,
+            content: noteInfo.content
+        }
 
-        const result = {}
-        result[droppableSource.droppableId] = sourceClone
-        result[droppableDestination.droppableId] = destinationClone
+        setNoteInfo({
+            title: "",
+            content: ""
+        })
 
-        return result;
+        list[0].push(note)
+        setIsVisibleModal(false)
     }
 
     return (
@@ -97,6 +91,26 @@ export const Main = ({screenSize}) => {
                     ))
                 }
             </DragDropContext>
+            <div style={{zIndex: 1, position: "absolute"}}>
+                <Fab
+                mainButtonStyles={mainButtonStyles}
+                actionButtonStyles={actionButtonStyles}
+                icon={<HiPlus />}
+                >
+                    <Action 
+                    style={actionButtonStyles}
+                    text="Add note"
+                    onClick={() => setIsVisibleModal(true)}
+                    >
+                        <HiDocumentAdd />
+                    </Action>
+                </Fab>
+            </div>
+            
+            {isVisibleModal && 
+                <MainModal addNote={addNote} noteInfo={noteInfo} handleInputChange={handleInputChange}/>
+            }
+            
         </div>
     )
 }

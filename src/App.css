@@ -9,6 +9,12 @@
   height: 100%;
 }
 
+.maincontent-content {
+  height: 100%;
+  width: 100%;
+  overflow-y: auto;
+}
+
 .pagebody-outer {
   display: flex;
 }
