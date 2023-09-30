@@ -12,6 +12,7 @@ export const DroppableContainer = ({item, index}) => {
         <Droppable key={index} droppableId={`${index}`}>
             {(provided, snapshot) => (
                 <div 
+                    key={index}
                     ref={provided.innerRef}
                     style={getListStyle(snapshot.isDraggingOver)}
                     {...provided.droppableProps}

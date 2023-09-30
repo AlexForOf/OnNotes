@@ -1,11 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
 
 import "./Main.css"
+
+
+import { getDatabase, ref, get, child } from 'firebase/database';
 
 import { move, reorder } from "./functions/dragndrop";
 import { defineGridSize } from "./functions/defineGridSize"
 
 import { mainButtonStyles, actionButtonStyles } from "./styles/styles";
+
+import { AuthContext } from "../../context/AuthContext";
 
 // Custom components
 
@@ -20,7 +25,8 @@ import { HiPlus, HiDocumentAdd } from "react-icons/hi";
 import { MainModal } from "../../components/MainModal";
  
 
-export const Main = ({screenSize}) => {
+export const Main = ({screenSize, writeNoteData}) => {
+    const currentAuth = useContext(AuthContext) 
     const [list, setList] = React.useState(defineGridSize(screenSize.width))
     const [noteInfo, setNoteInfo] = React.useState({
         title: "",
@@ -31,9 +37,6 @@ export const Main = ({screenSize}) => {
     const containerStyles = {
         gridTemplateColumns: `repeat(${list.length}, 1fr)`
     }
-
-
-    // Notes API
 
     const handleDragEnd = ({ destination, source }) => {
         if(!destination) return;
@@ -66,7 +69,6 @@ export const Main = ({screenSize}) => {
     const addNote = (event) => {
         event.preventDefault();
 
-        console.log(noteInfo)
         const note = {
             id: `${(new Date()).getTime()}`,
             title: noteInfo.title,
@@ -78,23 +80,46 @@ export const Main = ({screenSize}) => {
             content: ""
         })
 
+        writeNoteData(note);
         list[0].push(note)
         setIsVisibleModal(false)
     }
+
+    const putNotes = ({notes}) => {
+        setList(defineGridSize(screenSize.width, Object.values(notes)))
+    }
+
+    React.useEffect(() => {
+        if(currentAuth !== null) {
+            const readNotesData = () => {
+                const dbRef = ref(getDatabase())
+                get(child(dbRef, `users/${currentAuth.currentUser.uid}`)).then((snapshot) => {
+                  if(snapshot.exists()) {
+                    putNotes(snapshot.val());
+                  } else { 
+                    console.log("No available notes")
+                  }
+                })
+                .catch((err) => {
+                  return console.log(err)
+                })    
+            }
+            return readNotesData;
+        }
+    }, [currentAuth])
 
     return (
         <div style={containerStyles} className="mainpage-main">
             <DragDropContext onDragEnd={handleDragEnd}>
                 {
                     list.map((item, index) => (
-                        <DroppableContainer item={item} index={index} />
+                        <DroppableContainer key={index} item={item} index={index} />
                     ))
                 }
             </DragDropContext>
             <div style={{zIndex: 1, position: "absolute"}}>
                 <Fab
                 mainButtonStyles={mainButtonStyles}
-                actionButtonStyles={actionButtonStyles}
                 icon={<HiPlus />}
                 >
                     <Action 
