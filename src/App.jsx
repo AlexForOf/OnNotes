@@ -26,6 +26,7 @@ import { Profile } from './pages/Profile/Profile';
 
 function App() {
 
+
   const [currentAuth, setCurrentAuth] = React.useState(null)
 
   const getCurrentDimension = () => {
@@ -43,8 +44,6 @@ function App() {
       id: note.id
     })
   }
-
-
 
   const [screenSize, setScreenSize] = React.useState(getCurrentDimension())
 
@@ -70,7 +69,7 @@ function App() {
       })
     }
 
-    return anonymousSignIn;
+    return anonymousSignIn();
   }, [currentAuth])
 
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false)

@@ -91,21 +91,21 @@ export const Main = ({screenSize, writeNoteData}) => {
 
     React.useEffect(() => {
         if(currentAuth !== null) {
-            const readNotesData = () => {
-                const dbRef = ref(getDatabase())
+            const getNotes = () => {
+                const dbRef = ref(getDatabase());
                 get(child(dbRef, `users/${currentAuth.currentUser.uid}`)).then((snapshot) => {
-                  if(snapshot.exists()) {
-                    putNotes(snapshot.val());
-                  } else { 
-                    console.log("No available notes")
-                  }
-                })
-                .catch((err) => {
-                  return console.log(err)
-                })    
+                if (snapshot.exists()) {
+                    putNotes(snapshot.val())
+                } else {
+                    console.log("No data available");
+                }
+                }).catch((error) => {
+                console.error(error);
+                });
             }
-            return readNotesData;
+            return getNotes();
         }
+        // eslint-disable-next-line
     }, [currentAuth])
 
     return (
