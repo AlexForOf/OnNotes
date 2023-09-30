@@ -49,9 +49,6 @@ export const Main = ({screenSize}) => {
 
         const sInd = +source.droppableId;
         const dInd = +destination.droppableId;
-
-        console.log(dInd)
-        console.log(sInd)
         
         if(sInd === dInd) {
             const items = reorder(list[sInd], source.index, destination.index)

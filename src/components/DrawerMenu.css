@@ -14,3 +14,11 @@
 .logo-font-darker {
     color: #0F4C75;
 }
+
+@media only screen and (max-width: 768px) {
+    .sidebar-container {
+        height: 100%;
+        position: absolute;
+        z-index: 2;
+    }
+}

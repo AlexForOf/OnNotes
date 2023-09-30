@@ -1,4 +1,5 @@
 .mainpage-main {
+    height: inherit;
     width: 100%;
     display: grid;
     margin: 0 auto;

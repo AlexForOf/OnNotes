@@ -46,12 +46,14 @@ function App() {
         {/* <Header /> */}
         <div className='maincontent'>
           <DrawerMenu isDrawerOpen={isDrawerOpen} toggleDrawer={toggleDrawer} />
+          <div className='maincontent-content'>
             <Routes>
               <Route path='/' element={<Main screenSize={screenSize}/>} />
               <Route path='/groups' element={<Groups />} />
               <Route path='/controls' element={<Controls />} />
               <Route path='/profile' element={<Profile />} />
             </Routes>
+          </div>
         </div>
       </div>  
   );

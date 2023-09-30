@@ -39,42 +39,45 @@ export const DrawerMenu = ({isDrawerOpen, toggleDrawer}) => {
 
     
     return (
-        <Sidebar
-            rootStyles={{
-                [`.${sidebarClasses.container}`] : {
-                    background: "#FFFFFF",
-                    fontSize: "1.15em",
-                    fontWeight: "400",
-                    userSelect: "none"
-                },
-            }}
-            onBackdropClick={toggleDrawer}
-            collapsed={!isDrawerOpen}
-        >
-            <Menu
-                menuItemStyles={menuItemStyles}
+        <div className='sidebar-container'>
+            <Sidebar
+                style={{height: "100%"}}
+                rootStyles={{
+                    [`.${sidebarClasses.container}`] : {
+                        background: "#FFFFFF",
+                        fontSize: "1.15em",
+                        fontWeight: "400",
+                        userSelect: "none",
+                    },
+                }}
+                onBackdropClick={toggleDrawer}
+                collapsed={!isDrawerOpen}
             >
-                <MenuItem 
-                icon={ isDrawerOpen ? <HiX /> : <HiMenu />} 
-                onClick={() => toggleDrawer()} 
-                style={{textAlign: "start", marginBottom: "10px", borderBottom: "1px solid #efefef"}}
+                <Menu
+                    menuItemStyles={menuItemStyles}
                 >
-                    <Logo />
-                </MenuItem>
-                <MenuItem component={<NavLink to={"/"} />} icon={<HiHome />}> Main </MenuItem>
-                <MenuItem component={<NavLink to={"/groups"} />} icon={<HiFolder />}> Groups </MenuItem>
-                <SubMenu icon={<HiCog />} label="Preferences">
-                    <SubMenu icon={<HiPhotograph />} label="Theme" >  
-                        <MenuItem icon={<HiSun />} > Light </MenuItem>
-                        <MenuItem icon={<HiMoon />} > Dark </MenuItem>
+                    <MenuItem 
+                    icon={ isDrawerOpen ? <HiX /> : <HiMenu />} 
+                    onClick={() => toggleDrawer()} 
+                    style={{textAlign: "start", marginBottom: "10px", borderBottom: "1px solid #efefef"}}
+                    >
+                        <Logo />
+                    </MenuItem>
+                    <MenuItem component={<NavLink to={"/"} />} icon={<HiHome />}> Main </MenuItem>
+                    <MenuItem component={<NavLink to={"/groups"} />} icon={<HiFolder />}> Groups </MenuItem>
+                    <SubMenu icon={<HiCog />} label="Preferences">
+                        <SubMenu icon={<HiPhotograph />} label="Theme" >  
+                            <MenuItem icon={<HiSun />} > Light </MenuItem>
+                            <MenuItem icon={<HiMoon />} > Dark </MenuItem>
+                        </SubMenu>
+                        <MenuItem component={<NavLink to={"/controls"} />} icon={<HiAdjustments />}> Controls </MenuItem>
                     </SubMenu>
-                    <MenuItem component={<NavLink to={"/controls"} />} icon={<HiAdjustments />}> Controls </MenuItem>
-                </SubMenu>
-                <SubMenu icon={<HiUser />} label="User">
-                    {isUserAuth && <MenuItem component={<NavLink to={"/profile"} />} icon={<HiIdentification />} > Your Profile </MenuItem>}
-                    {loginout}
-                </SubMenu>
-            </Menu>
-        </Sidebar>
+                    <SubMenu icon={<HiUser />} label="User">
+                        {isUserAuth && <MenuItem component={<NavLink to={"/profile"} />} icon={<HiIdentification />} > Your Profile </MenuItem>}
+                        {loginout}
+                    </SubMenu>
+                </Menu>
+            </Sidebar>
+        </div>
     )
 }
