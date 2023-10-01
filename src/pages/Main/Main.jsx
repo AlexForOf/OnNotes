@@ -3,7 +3,7 @@ import React, { useContext } from "react";
 import "./Main.css"
 
 
-import { getDatabase, ref, get, child } from 'firebase/database';
+import { getDatabase, ref, get, child, set } from 'firebase/database';
 
 import { move, reorder } from "./functions/dragndrop";
 import { defineGridSize } from "./functions/defineGridSize"
@@ -28,10 +28,9 @@ import { MainModal } from "../../components/MainModal";
 export const Main = ({screenSize, writeNoteData}) => {
     const currentAuth = useContext(AuthContext) 
     const [list, setList] = React.useState(defineGridSize(screenSize.width))
-    const [noteInfo, setNoteInfo] = React.useState({
-        title: "",
-        content: ""
-    })
+
+    const [currentModal, setCurrentModal] = React.useState(null)
+
     const [isVisibleModal, setIsVisibleModal] = React.useState(false)
 
     const containerStyles = {
@@ -61,28 +60,64 @@ export const Main = ({screenSize, writeNoteData}) => {
 
     }
 
-    const handleInputChange = ({value, name}) => {
-        setNoteInfo(prevNoteInfo => ({...prevNoteInfo, [name]: value}))
-        console.log(noteInfo)
+    const showModal = (type, noteInfo = {
+        title: "",
+        content: "",
+        isBookmarked: false,
+        group: "",
+        color: "#FFFFFF",
+        tags: {
+
+        }
+    }) => {
+        let workOnNote;
+        if(type === "Create") workOnNote = addNote;
+        if(type === "Edit") workOnNote = updateNote;
+        setCurrentModal(<MainModal workOnNote={workOnNote} noteInfo={noteInfo} setIsVisibleModal={setIsVisibleModal} type={type}/>)
+        setIsVisibleModal(true)
     }
 
-    const addNote = (event) => {
+    const addNote = (event, info) => {
         event.preventDefault();
 
         const note = {
             id: `${(new Date()).getTime()}`,
-            title: noteInfo.title,
-            content: noteInfo.content
+            ...info
         }
-
-        setNoteInfo({
-            title: "",
-            content: ""
-        })
 
         writeNoteData(note);
         list[0].push(note)
         setIsVisibleModal(false)
+    }
+
+    const updateNote = (event, info) => {
+        event.preventDefault();
+
+        let foundIndexArray;
+        let foundIndexElem;
+
+        for (let i = 0; i < list.length; i++) {
+            for (let j = 0; j < list[i].length; j++) {
+                if(list[i][j].id === info.id){
+                    foundIndexElem = j;
+                    foundIndexArray = i;
+                    break;
+                }
+            }
+        }
+
+        if(list[foundIndexArray][foundIndexElem] !== info) {
+            const db = getDatabase();
+            set(ref(db, `users/${currentAuth.currentUser.uid}/notes/${info.id}`), info)
+            list[foundIndexArray][foundIndexElem] = info;
+            setList(list)
+        }
+        
+        setIsVisibleModal(false)
+    }
+
+    const selectNote = (noteInfo) => {
+        showModal("Edit", noteInfo)
     }
 
     const putNotes = ({notes}) => {
@@ -113,7 +148,7 @@ export const Main = ({screenSize, writeNoteData}) => {
             <DragDropContext onDragEnd={handleDragEnd}>
                 {
                     list.map((item, index) => (
-                        <DroppableContainer key={index} item={item} index={index} />
+                        <DroppableContainer selectNote={selectNote} key={index} item={item} index={index} />
                     ))
                 }
             </DragDropContext>
@@ -125,7 +160,7 @@ export const Main = ({screenSize, writeNoteData}) => {
                     <Action 
                     style={actionButtonStyles}
                     text="Add note"
-                    onClick={() => setIsVisibleModal(true)}
+                    onClick={() => showModal("Create")}
                     >
                         <HiDocumentAdd />
                     </Action>
@@ -133,7 +168,7 @@ export const Main = ({screenSize, writeNoteData}) => {
             </div>
             
             {isVisibleModal && 
-                <MainModal addNote={addNote} noteInfo={noteInfo} handleInputChange={handleInputChange}/>
+                currentModal
             }
             
         </div>

@@ -1,0 +1,127 @@
+.mainpage-main-modal-overlay {
+    background: lightgray;
+    opacity: 0.6;
+    top: 0;
+    left: 0;
+    position: absolute;
+    z-index: 3;
+    height: 100%;
+    width: 100vw;
+    /* height: 100%; */
+    /* width: 100%; */
+}
+
+.mainpage-main-modal {
+    border-radius: 12px;
+
+    /* color: #FFFFFF; */
+    position: absolute;
+    
+    /* padding: 10px; */
+    background: #FFFFFF;
+    z-index: 4;
+
+    /* width: 450px; */
+    max-width: 450px;
+    height: fit-content;
+    max-height: 800px;
+    overflow-y: auto;
+    overflow-x: auto;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.modal-icon {
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    /* padding: 5px; */
+    margin-left: -5px;
+    font-size: 1.25em;
+    transition: opacity 0.25s;
+    cursor: pointer;
+}
+
+.main-modal-title textarea {
+    font-size: 1.25em;
+}
+
+.main-modal-content {
+    font-size: 0.85em;
+}
+
+.mainpage-main-modal form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.mainpage-main-modal form textarea {
+    min-height: 25px;
+    height: fit-content;
+    outline: none;
+    border: none;
+    word-wrap: break-word;
+    word-break: break-all;
+    resize: none;
+    /* width: 100%; */
+    width: 75vw;
+}
+.main-modal-part {
+    padding: 0 10px;
+    display: flex;
+    gap: 5px;
+}
+
+.modal-icon:hover { 
+    background: #86868662;
+}
+
+.main-modal-footer, .main-modal-header {
+    justify-content: space-between;
+}
+
+.main-modal-header, .main-modal-footer  {
+    padding: 10px;
+}
+
+.main-modal-footer div, .main-modal-header div {
+    display: flex;
+}
+
+.modal-footer-element, .modal-header-element {
+    position: relative;
+}
+
+.modal-footer-icons {
+    gap: 15px;
+}
+
+.modal-header-left {
+    display: flex;
+}
+
+.modal-submit-button {
+    font-family: "Rubik", serif;
+    padding: 5px 20px;
+    border: none;
+    outline: none;
+    font-weight: 600;
+    background: transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: cubic-bezier(0.075, 0.82, 0.165, 1) 0.10s;
+}
+
+.modal-submit-button:hover {
+    background: lightgrey;
+}
+
+.tooltip {
+    padding: 5px;
+}
+
+.tooltip .tooltip-is {
+    font-size: 0.65em;
+}

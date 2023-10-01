@@ -9,7 +9,9 @@ const getItemStyle = (isDragging, draggableStyle) => ({
     ...draggableStyle
 });
 
-export const DraggableCard = ({el, index}) => {
+export const DraggableCard = ({el, index, selectNote}) => {
+    const noteInfo = el
+    console.log(noteInfo)
     return (
         <Draggable
             key={el.id}
@@ -27,7 +29,11 @@ export const DraggableCard = ({el, index}) => {
                         provided.draggableProps.style
                     )}
                     className="draggablecard-container"
+                    onClick={() => selectNote(noteInfo)}
                 >
+                    <div style={{
+                        background: (noteInfo.isBookmarked ? "#000" : "#FFFFFF")
+                    }} className="draggablecard-container-bookmark"></div>
                     <div className="draggablecard-container-title">
                         {el.title}
                     </div>

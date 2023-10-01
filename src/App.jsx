@@ -38,11 +38,7 @@ function App() {
   
   const writeNoteData = (note) => {
     const db = getDatabase();
-    set(ref(db, "users/" + currentAuth.currentUser.uid + "/notes/" + note.id), {
-      title: note.title,
-      content: note.content,
-      id: note.id
-    })
+    set(ref(db, "users/" + currentAuth.currentUser.uid + "/notes/" + note.id), note)
   }
 
   const [screenSize, setScreenSize] = React.useState(getCurrentDimension())
